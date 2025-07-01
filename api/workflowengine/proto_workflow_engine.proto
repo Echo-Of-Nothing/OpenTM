@@ -1,0 +1,66 @@
+syntax = "proto3";
+
+package workflowengine;
+
+option go_package = "opentm/api/workflowengine;workflowengine";
+
+// 服务定义
+service WorkflowEngine {
+  // 启动工作流
+  rpc StartWorkflow(StartWorkflowRequest) returns (StartWorkflowResponse);
+  
+  // 查询工作流状态
+  rpc GetWorkflowStatus(GetWorkflowStatusRequest) returns (GetWorkflowStatusResponse);
+  
+  // 发送信号
+  rpc SignalWorkflow(SignalWorkflowRequest) returns (SignalWorkflowResponse);
+  
+  // 停止工作流
+  rpc StopWorkflow(StopWorkflowRequest) returns (StopWorkflowResponse);
+}
+
+// 启动工作流请求
+message StartWorkflowRequest {
+  string workflow_name = 1;                 // 工作流名称
+  map<string, string> input_parameters = 2; // 输入参数
+}
+
+// 启动工作流响应
+message StartWorkflowResponse {
+  string workflow_id = 1; // 返回唯一工作流 ID
+}
+
+// 查询工作流状态请求
+message GetWorkflowStatusRequest {
+  string workflow_id = 1; // 工作流 ID
+}
+
+// 查询工作流状态响应
+message GetWorkflowStatusResponse {
+  string status = 1; // 状态：RUNNING, FAILED, TERMINATED, COMPLETED 等
+  string started_at = 2; // 启动时间
+  string ended_at = 3;   // 结束时间（若 applicable）
+}
+
+// 发送信号请求
+message SignalWorkflowRequest {
+  string workflow_id = 1; // 目标工作流
+  string signal_name = 2; // 信号名称
+  string signal_data = 3; // 信号携带的附加数据
+}
+
+// 发送信号响应
+message SignalWorkflowResponse {
+  string status = 1; // 信号发送结果
+}
+
+// 停止工作流请求
+message StopWorkflowRequest {
+  string workflow_id = 1; // 目标工作流 ID
+  string reason = 2;      // 停止原因
+}
+
+// 停止工作流响应
+message StopWorkflowResponse {
+  string status = 1; // 停止结果
+}

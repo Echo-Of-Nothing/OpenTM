@@ -1,0 +1,99 @@
+syntax = "proto3";
+
+package modelengine;
+
+option go_package = "opentm/api/modelengine;modelengine";
+
+// 服务定义
+service ModelEngine {
+  // 上传模型
+  rpc UploadModel(UploadModelRequest) returns (UploadModelResponse);
+  
+  // 下载模型
+  rpc DownloadModel(DownloadModelRequest) returns (DownloadModelResponse);
+  
+  // 检索模型列表
+  rpc ListModels(ListModelsRequest) returns (ListModelsResponse);
+  
+  // 查询模型详情
+  rpc GetModelMetadata(GetModelMetadataRequest) returns (GetModelMetadataResponse);
+  
+  // 删除模型
+  rpc DeleteModel(DeleteModelRequest) returns (DeleteModelResponse);
+}
+
+// 上传模型请求
+message UploadModelRequest {
+  string model_name = 1;
+  string version = 2;
+  bytes model_file = 3; // 用于文件传输
+  string description = 4; // 模型描述
+  string author = 5; // 模型上传者
+}
+
+// 上传模型响应
+message UploadModelResponse {
+  string model_id = 1; // 返回唯一模型 ID
+}
+
+// 下载模型请求
+message DownloadModelRequest {
+  string model_id = 1; // 指定下载的模型 ID
+}
+
+// 下载模型响应
+message DownloadModelResponse {
+  string model_name = 1;
+  string version = 2;
+  bytes model_file = 3; // 模型文件
+}
+
+// 检索模型列表请求
+message ListModelsRequest {
+  string keyword = 1;         // 搜索关键词
+  string sort_by = 2;         // 排序字段
+  string order = 3;           // 排序顺序：asc/desc
+  int32 page = 4;             // 分页页码
+  int32 page_size = 5;        // 每页数量
+}
+
+// 检索模型列表响应
+message ListModelsResponse {
+  repeated ModelSummary models = 1; // 模型摘要列表
+  int32 total_count = 2;            // 模型总数
+}
+
+// 模型摘要
+message ModelSummary {
+  string model_id = 1;
+  string model_name = 2;
+  string version = 3;
+  string status = 4;           // 模型状态：TRAINING, DEPLOYED 等
+  string created_at = 5;       // 创建时间
+}
+
+// 查询模型详情请求
+message GetModelMetadataRequest {
+  string model_id = 1; // 模型 ID
+}
+
+// 查询模型详情响应
+message GetModelMetadataResponse {
+  string model_id = 1;
+  string model_name = 2;
+  string version = 3;
+  string description = 4;
+  string status = 5;         // 模型状态
+  string author = 6;         // 上传者
+  string created_at = 7;     // 创建时间
+}
+
+// 删除模型请求
+message DeleteModelRequest {
+  string model_id = 1; // 模型 ID
+}
+
+// 删除模型响应
+message DeleteModelResponse {
+  string status = 1; // 删除结果
+}

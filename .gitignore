@@ -1,0 +1,17 @@
+    # .gitignore
+    # IDE / Editor
+    .idea/
+    *.swp
+
+    # OS generated files
+    .DS_Store
+
+    # Go build artifacts
+    *.exe
+    *.out
+    /bin/
+    /build/
+
+    # Logs and runtime files
+    *.log
+    temp/

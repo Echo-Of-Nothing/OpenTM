@@ -1,0 +1,17 @@
+version: v1
+plugins:
+  # 生成 Go protobuf 代码
+  - plugin: buf.build/protocolbuffers/go:v1.31.0
+    out: ../
+    opt:
+      - module=opentm
+      - Mgoogle/protobuf/timestamp.proto=google.golang.org/protobuf/types/known/timestamppb
+      - Mgoogle/protobuf/duration.proto=google.golang.org/protobuf/types/known/durationpb
+      - Mgoogle/protobuf/empty.proto=google.golang.org/protobuf/types/known/emptypb
+
+  # 生成 gRPC Go 代码
+  - plugin: buf.build/grpc/go:v1.3.0
+    out: ../
+    opt:
+      - module=opentm
+      - require_unimplemented_servers=false
